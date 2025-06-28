@@ -1,9 +1,22 @@
 const Fastify = require('fastify')
 require('dotenv').config()
 
-const app = Fastify({ logger: true })
+const app = Fastify({
+  logger: true,
+  bodyLimit: 100 * 1024 * 1024
+})
 
-app.register(require('@fastify/multipart'))
+app.register(require('@fastify/multipart'), {
+  limits: {
+    fieldNameSize: 100,
+    fieldSize: 1024 * 1024,
+    fields: 10,
+    fileSize: 100 * 1024 * 1024,
+    files: 1,
+    headerPairs: 2000
+  }
+})
+
 app.addContentTypeParser('application/json', { parseAs: 'string' }, app.getDefaultJsonParser('ignore', 'ignore'))
 
 app.addContentTypeParser('application/x-www-form-urlencoded', (request, payload, done) => {
