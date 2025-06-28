@@ -9,4 +9,5 @@ temp
 .eslint*
 assets
 users
+models
 model
